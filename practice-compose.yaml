@@ -1,0 +1,112 @@
+# come back to this document to understand what went wrong why did it not work?
+
+# version: '3'
+
+# services:
+#   # controller-1:
+#   #   image: confluentinc/cp-server:7.7.0
+#   #   hostname: controller-1
+#   #   container_name: controller-1
+#   #   environment:
+#   #     KAFKA_NODE_ID: 1
+#   #     CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+#   #     KAFKA_PROCESS_ROLES: controller
+#   #     KAFKA_LISTENERS: CONTROLLER://controller-1:19091
+#   #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+#   #     KAFKA_INTER_BROKER_LISTENER_NAME: CONTROLLER
+#   #     KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#   #     KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091
+#   #     KAFKA_BROKER_RACK: rack-0
+#   #     KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+#   #     KAFKA_OFFSET_REPLICATION_FACTOR: 1
+#   #     KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+#   #     KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+#   #     KAFKA_CONFLUENT_METADATA_TOPIC_REPLICATION_FACTOR: 1
+#   #     KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
+#   #   cap_add:
+#   #     - NET_ADMIN
+#   #   ports:
+#   #     - 19091:19091
+#   broker-1:
+#     image: apache/kafka:3.8.0
+#     hostname: broker-1
+#     container_name: broker-1
+#     # depends_on:
+#     #   - controller-1
+#     environment:
+#       KAFKA_NODE_ID: 2
+#       CLUSTER_ID: Nk018hRAQFytWskYqtQduw
+#       KAFKA_LISTENERS: BROKER://broker-1:9092
+#       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: BROKER:PLAINTEXT, CONTROLLER:PLAINTEXT
+#       KAFKA_ADVERTISED_LISTENERS: BROKER://localhost:9092
+#       KAFKA_INTER_BROKER_LISTENER_NAME: BROKER
+#       # KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+#       # KAFKA_BROKER_RACK: rack-0
+#       # KAFKA_MIN_INSYNC_REPLICAS: 1
+#       # KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+#       # KAFKA_CONFLUENT_CLUSTER_LINK_ENABLED: False
+#       # KAFKA_CONTROLLER_QUORUM_BOOTSTRAP_SERVERS: 1@controller-1:19091
+#       # KAFKA_CONTROLLER_QUORUM_VOTERS: 1@controller-1:19091
+#       KAFKA_CONTROLLER_QUORUM_VOTERS: 2@broker-1:9092
+#       KAFKA_PROCESS_ROLES: broker, controller
+#       # KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+#       KAFKA_CONTROLLER_LISTENER_NAMES: BROKER
+#     cap_add:
+#       - NET_ADMIN
+#     ports:
+#       - 9092:9092
+#   # kafka:
+#   #   image: apache/kafka:3.8.0   # or your pulled image tag
+#   #   container_name: kafka    # Name for the container
+#   #   ports:
+#   #     - "9092:9092"
+#   #   volumes:
+#   #     - kafka-data:/var/lib/kafka/data
+#   #   networks:
+#   #     - kafka-net
+#     # environment:
+#     #   KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+#       # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+#   # schema-registry:
+#   #   image: confluentinc/cp-schema-registry:7.7.1
+#   #   container_name: schema-registry
+#   #   depends_on:
+#   #     - kafka
+#   #   ports:
+#   #     - "8081:8081"
+#   #   environment:
+#   #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
+#   #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+#   #     SCHEMA_REGISTRY_HOST_NAME: schema-registry  # Set this to the container name or service name
+#   #   networks:
+#   #     - kafka-net
+
+# # volumes:
+# #   kafka-data:
+# #     driver: local
+
+# # networks:
+# #   kafka-net:
+# #     driver: bridge
+
+# version: "3"
+# services:
+#   kafka:
+#     image: bitnami/kafka
+#     container_name: kafka
+#     ports:
+#       - 9091:9091
+#     environment:
+#       - KAFKA_ENABLE_KRAFT=yes
+#       - KAFKA_CFG_PROCESS_ROLES=broker,controller
+#       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+#       - KAFKA_CFG_LISTENERS=PLAINTEXT://:9091,CONTROLLER://:2181
+#       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+#       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9091
+#       - KAFKA_BROKER_ID=1
+#       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:2181
+#       - ALLOW_PLAINTEXT_LISTENER=yes
+#       - KAFKA_CFG_NODE_ID=1
+#       - KAFKA_KRAFT_CLUSTER_ID=MkU3OEVBNTcwNTJENDM2Qk
+#     # volumes:
+#     #   - ./kafka:/bitnami/kafka
